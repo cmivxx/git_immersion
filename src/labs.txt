@@ -14,7 +14,7 @@ section.
 
 execute:
 git config --global user.name "Your Name"
-git config --global user.email "your_email@whatever.com"
+git config --global user.email "your_email@keyingredient.com"
 
 h2. Setup Line Ending Preferences
 
@@ -42,7 +42,7 @@ h2. Get the Tutorial package.
 p. Git the tutorial package from either:
 
 * The memory sticks provided in the tutorial
-* The URL "http://gitimmersion.com/git_tutorial.zip":http://gitimmersion.com/git_tutorial.zip
+* The URL "http://devops.myfamilyvault.com/git_tutorial.zip":http://devops.myfamilyvault.com/git_tutorial.zip
 
 h2. Unzip the tutorial
 
@@ -63,15 +63,15 @@ h3. Goals
 h2. Create a "Hello, World" program
 
 p. Starting in the empty working directory, create an empty directory
-named "hello", then create a file named @hello.rb@ with the contents
+named "hello", then create a file named @hello.py@ with the contents
 below.
 
 Execute:
 mkdir hello
 cd hello
 
-File: hello.rb
-puts "Hello, World"
+File: hello.py
+print "Hello, World"
 EOF
 
 h2. Create the Repository
@@ -82,8 +82,8 @@ repository from that directory, run the git init command.
 Execute:
 git init
 =init
-+git config user.name "Jim Weirich"
-+git config user.email "jim (at) edgecase.com"
++git config user.name "Ryan Nowakowski"
++git config user.email "ryan@keyingredient.com"
 
 Output:
 =init
@@ -94,7 +94,7 @@ h2. Add the program to the repository
 Now let's add the "Hello, World" program to the repository.
 
 Execute:
-git add hello.rb
+git add hello.py
 =add
 git commit -m "First Commit"
 =commit
@@ -147,8 +147,9 @@ h2. Change the "Hello, World" program.
 p. It's time to change our hello program to take an argument from the
 command line.  Change the file to be:
 
-File: hello.rb
-puts "Hello, #{ARGV.first}!"
+File: hello.py
+import sys
+print "Hello, %s!" % sys.argv[1]
 EOF
 
 h2. Check the status
@@ -165,7 +166,7 @@ Output:
 =status
 EOF
 
-p. The first thing to notice is that git knows that the @hello.rb@
+p. The first thing to notice is that git knows that the @hello.py@
 file has been modified, but git has not yet been notified of these
 changes.
 
@@ -190,7 +191,7 @@ h2. Add Changes
 p. Now tell git to stage the changes.  Check the status
 
 Execute:
-git add hello.rb
+git add hello.py
 =add
 git status
 =status
@@ -202,7 +203,7 @@ Output:
 =status
 EOF
 
-p. The change to the @hello.rb@ file has been staged.  This means that
+p. The change to the @hello.py@ file has been staged.  This means that
 git now knows about the change, but the change hasn't been
 _permanently_ recorded in the repository yet.  The next commit
 operation will include the staged changes.
@@ -221,21 +222,21 @@ at the point you want to interact with source control, git allows you
 to record your changes in small commits that record exactly what you
 did.
 
-p. For example, suppose you edited three files (@a.rb@, @b.rb@, and
-@c.rb@).  Now you want to commit all the changes, but you want the
-changes in @a.rb@ and @b.rb@ to be a single commit, while the changes
-to @c.rb@ are not logically related to the first two files and should
+p. For example, suppose you edited three files (@a.py@, @b.py@, and
+@c.py@).  Now you want to commit all the changes, but you want the
+changes in @a.py@ and @b.py@ to be a single commit, while the changes
+to @c.py@ are not logically related to the first two files and should
 be a separate commit.
 
 p. You could do the following:
 
 pre(instructions).
-git add a.rb
-git add b.rb
+git add a.py
+git add b.py
 git commit -m "Changes for a and b"
 
 pre(instructions).
-git add c.rb
+git add c.py
 git commit -m "Unrelated change to c"
 
 p. By separating staging and committing, you have the ability to
@@ -254,7 +255,7 @@ p. Ok, enough about staging.  Let's commit what we have staged to the
 repository.
 
 p. When you used @git commit@ previously to commit the initial version
-of the @hello.rb@ file to the repository, you included the @-m@ flag
+of the @hello.py@ file to the repository, you included the @-m@ flag
 that gave a comment on the command line.  The commit command will
 allow you to interactively edit a comment for the commit.  Let's try
 that now.
@@ -274,7 +275,7 @@ p. So commit now and check the status.
 
 Execute:
 -git commit
-+git commit -m "Using ARGV"
++git commit -m "Using sys.argv"
 
 p. You should see the following in your editor:
 
@@ -286,17 +287,17 @@ Output:
 # Changes to be committed:
 #   (use "git reset HEAD <file>..." to unstage)
 #
-#	modified:   hello.rb
+#	modified:   hello.py
 #
 EOF
 
-p. On the first line, enter the comment: "Using ARGV".  Save the file
+p. On the first line, enter the comment: "Using sys.argv".  Save the file
 and exit the editor.  You should see ...
 
 Output:
 git commit
 Waiting for Emacs...
-[master 569aa96] Using ARGV
+[master 569aa96] Using sys.argv
  1 files changed, 1 insertions(+), 1 deletions(-)
 EOF
 
@@ -344,10 +345,14 @@ h2. First Change: Allow a default name
 p. Change the "Hello, World" program to have a default value if a
 command line argument is not supplied.
 
-File: hello.rb
-name = ARGV.first || "World"
+File: hello.py
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 h2. Add this Change
@@ -355,17 +360,21 @@ h2. Add this Change
 p. Now add this change to the git's staging area.
 
 Execute:
-git add hello.rb
+git add hello.py
 
 h2. Second change: Add a comment
 
 p. Now add a comment to the "Hello, World" program.
 
-File: hello.rb
+File: hello.py
 # Default is "World"
-name = ARGV.first || "World"
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 h2. Check the current status
@@ -380,7 +389,7 @@ Output:
 =status
 EOF
 
-p. Notice how @hello.rb@ is listed twice in the status.  The first
+p. Notice how @hello.py@ is listed twice in the status.  The first
 change (adding a default) is staged and is ready to be committed.  The
 second change (adding a comment) is unstaged.  If you were to commit
 right now, the comment would not be saved in the repository.
@@ -405,7 +414,7 @@ Output:
 =status2
 EOF
 
-p. The status command is telling you that @hello.rb@ has unrecorded changes,
+p. The status command is telling you that @hello.py@ has unrecorded changes,
 but is no longer in the staging area.
 
 h2. Add the Second Change
@@ -496,7 +505,7 @@ p. See man git-log for all the details.
 h2. Getting Fancy
 
 p. Here's what I use to review the changes made in the last week.
-I'll add @--author=jim@ if I only want to see changes I made.
+I'll add @--author=ryan@ if I only want to see changes I made.
 
 pre(instructions).
 git log --all --pretty=format:'%h %cd %s (%an)' --since='7 days ago'
@@ -646,13 +655,13 @@ EOF
 p. Examine the log output and find the hash for the first commit.  It
 should be the last line of the @git hist@ output.  Use that hash code
 (the first 7 characters are enough) in the command below.  Then check
-the contents of the hello.rb file.
+the contents of the hello.py file.
 
 Set: hash=hash_for("First Commit")
 Execute:
 git checkout <hash>
 =checkout
-cat hello.rb
+cat hello.py
 =cat
 
 p(note). *Note:* The commands given here are Unix commands and
@@ -675,14 +684,14 @@ p. The output of the @checkout@ command explains the situation pretty
 well.  Older versions of git will complain about not being on a local
 branch.  In any case, don't worry about that for now.
 
-p. Notice the contents of the hello.rb file are the original contents.
+p. Notice the contents of the hello.py file are the original contents.
 
 h2. Return the latest version in the master branch
 
 Execute:
 git checkout master
 =checkout2
-cat hello.rb
+cat hello.py
 =cat2
 
 p. You should see ...
@@ -726,7 +735,7 @@ p(note). If the @v1@^ notation gives you any trouble, you can also try
 Execute:
 git checkout v1^
 =checkout
-cat hello.rb
+cat hello.py
 =cat
 
 Output:
@@ -797,19 +806,23 @@ p. Make sure you are on the latest commit in master before proceeding.
 Execute:
 git checkout master
 
-h2. Change hello.rb
+h2. Change hello.py
 
 p. Sometimes you have modified a file in your local working directory
 and you wish to just revert to what has already been committed.  The
 checkout command will handle that.
 
-Change hello.rb to have a bad comment.
+Change hello.py to have a bad comment.
 
-File: hello.rb
+File: hello.py
 # This is a bad comment.  We want to revert it.
-name = ARGV.first || "World"
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 h2. Check the Status
@@ -824,20 +837,20 @@ Output:
 =status
 EOF
 
-p. We see that the @hello.rb@ file has been modified, but hasn't been
+p. We see that the @hello.py@ file has been modified, but hasn't been
 staged yet.
 
 h2. Revert the changes in the working directory
 
 p. Use the @checkout@ command to checkout the repository's version of
-the @hello.rb@ file.
+the @hello.py@ file.
 
 Execute:
-git checkout hello.rb
+git checkout hello.py
 =checkout
 !git status
 =status2
-cat hello.rb
+cat hello.py
 =cat
 
 Output:
@@ -859,19 +872,23 @@ h3. Goals
 
 h2. Change the file and stage the change
 
-p. Modify the @hello.rb@ file to have a bad comment
+p. Modify the @hello.py@ file to have a bad comment
 
-File: hello.rb
+File: hello.py
 # This is an unwanted but staged comment
-name = ARGV.first || "World"
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 p. And then go ahead and stage it.
 
 Execute:
-git add hello.rb
+git add hello.py
 
 h2. Check the Status
 
@@ -894,7 +911,7 @@ p. Fortunately the status output tells us exactly what we need to do
 to unstage the change.
 
 Execute:
-git reset HEAD hello.rb
+git reset HEAD hello.py
 =reset
 
 Output:
@@ -912,7 +929,7 @@ the unwanted change from the working directory.
 h2. Checkout the Committed Version
 
 Execute:
-git checkout hello.rb
+git checkout hello.py
 git status
 =status2
 
@@ -941,17 +958,21 @@ reverses the unwanted changes.
 
 h2. Change the file and commit it.
 
-p. Change the @hello.rb@ file to the following.
+p. Change the @hello.py@ file to the following.
 
-File: hello.rb
+File: hello.py
 # This is an unwanted but committed change
-name = ARGV.first || "World"
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 Execute:
-git add hello.rb
+git add hello.py
 git commit -m "Oops, we didn't want this commit"
 
 h2. Create a Reverting Commit
@@ -1147,16 +1168,20 @@ h2. Change the program then commit
 
 p. Add an author comment to the program.
 
-File: hello.rb
+File: hello.py
 # Default is World
-# Author: Jim Weirich
-name = ARGV.first || "World"
+# Author: Ryan Nowakowski
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 Execute:
-git add hello.rb
+git add hello.py
 git commit -m "Add an author comment"
 
 h2. Oops, Should have an Email
@@ -1165,12 +1190,16 @@ p. After you make the commit, you realize that any good author comment
 should have an email included.  Update the hello program to include an
 email.
 
-File: hello.rb
+File: hello.py
 # Default is World
-# Author: Jim Weirich (jim@somewhere.com)
-name = ARGV.first || "World"
+# Author: Ryan Nowakowski (ryan@keyingredient.com)
+import sys
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
 
-puts "Hello, #{name}!"
+print "Hello, %s!" % name
 EOF
 
 h2. Amend the Previous Commit
@@ -1179,7 +1208,7 @@ p. We really don't want a separate commit for just the email.  Let's
 amend the previous commit to include the email change.
 
 Execute:
-git add hello.rb
+git add hello.py
 =add
 git commit --amend -m "Add an author/email comment"
 =commit
@@ -1212,7 +1241,7 @@ h3. Goals
 
 * Learn how to move a file within a repository.
 
-h2. Move the hello.rb file into a lib directory.
+h2. Move the hello.py file into a lib directory.
 
 p. We are now going to build up the structure of our little
 repository.  Let's move the program into a lib directory.
@@ -1220,7 +1249,7 @@ repository.  Let's move the program into a lib directory.
 Execute:
 mkdir lib
 =mkdir
-git mv hello.rb lib
+git mv hello.py lib
 =move
 !git status
 =status
@@ -1233,8 +1262,8 @@ EOF
 
 p. By using git to do the move, we inform git of 2 things
 
-# That the file @hello.rb@ has been deleted.
-# The file @lib/hello.rb@ has been created.
+# That the file @hello.py@ has been deleted.
+# The file @lib/hello.py@ has been created.
 
 p. Both of these bits of information are immediately staged and ready
 to be committed.  The git status command reports that the file has been
@@ -1253,16 +1282,16 @@ just did.  It's a bit more work, but the result is the same.
 p(command). We could have done:
 
 pre(instructions). mkdir lib
-mv hello.rb lib
-git add lib/hello.rb
-git rm hello.rb
+mv hello.py lib
+git add lib/hello.py
+git rm hello.py
 
 h2. Commit the new directory
 
 p. Let's commit this move.
 
 Execute:
-git commit -m "Moved hello.rb to lib"
+git commit -m "Moved hello.py to lib"
 
 ----------------------------------------------------------------------
 h1. More Structure
@@ -1490,9 +1519,9 @@ Output:
 =libdump
 EOF
 
-p. There's the @hello.rb@ file.
+p. There's the @hello.py@ file.
 
-h2. Dumping the @hello.rb@ file
+h2. Dumping the @hello.py@ file
 
 Set: rbhash=hash_in(var['libhash'], 'hello')
 Execute:
@@ -1510,7 +1539,7 @@ it, blobs, trees and commits.
 h2. Explore On You Own
 
 p. Explore the git repo manually on your own.  See if you can find the
-original hello.rb file from the very first commit by manually
+original hello.py file from the very first commit by manually
 following the SHA1 hash references starting in the latest commit.
 
 ----------------------------------------------------------------------
@@ -1540,37 +1569,39 @@ p. Notice that the git status command reports that you are on the
 
 h2. Changes for Greet: Add a Greeter class.
 
-File: lib/greeter.rb
-class Greeter
-  def initialize(who)
-    @who = who
-  end
-  def greet
-    "Hello, #{@who}"
-  end
-end
+File: lib/greeter.py
+class Greeter(object):
+    def __init__(self, who):
+        self.who = who
+    def greet(self):
+        return "Hello, %s" % self.who
 EOF
 
 Execute:
-git add lib/greeter.rb
+git add lib/greeter.py
 git commit -m "Added greeter class"
 
 h2. Changes for Greet: Modify the main program
 
-p. Update the hello.rb file to use greeter
+p. Update the hello.py file to use greeter
 
-File: lib/hello.rb
-require 'greeter'
+File: lib/hello.py
+import sys
+import greeter
 
 # Default is World
-name = ARGV.first || "World"
 
-greeter = Greeter.new(name)
-puts greeter.greet
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
+
+greeter = Greeter(name)
+print greeter.greet()
 EOF
 
 Execute:
-git add lib/hello.rb
+git add lib/hello.py
 git commit -m "Hello uses Greeter"
 
 h2. Changes for Greet: Update the Rakefile
@@ -1583,7 +1614,7 @@ File: Rakefile
 task :default => :run
 
 task :run do
-  ruby '-Ilib', 'lib/hello.rb'
+  ruby '-Ilib', 'lib/hello.py'
 end
 EOF
 
@@ -1620,7 +1651,7 @@ p. Just use the @git checkout@ command to switch between branches.
 Execute:
 git checkout master
 =checkout
-cat lib/hello.rb
+cat lib/hello.py
 =cat
 
 Output:
@@ -1629,14 +1660,14 @@ Output:
 EOF
 
 p. You are now on the master branch.  You can tell because the
-hello.rb file doesn't use the @Greeter@ class.
+hello.py file doesn't use the @Greeter@ class.
 
 h2. Switch Back to the Greet Branch.
 
 Execute:
 git checkout greet
 =checkout2
-cat lib/hello.rb
+cat lib/hello.py
 =cat2
 
 Output:
@@ -1644,7 +1675,7 @@ Output:
 =cat2
 EOF
 
-p. The contents of the @lib/hello.rb@ confirms we are back on the
+p. The contents of the @lib/hello.py@ confirms we are back on the
 *greet* branch.
 
 ----------------------------------------------------------------------
@@ -1755,15 +1786,14 @@ p. Switch back to the master branch and make this change:
 Execute:
 git checkout master
 
-File: lib/hello.rb
-puts "What's your name"
-my_name = gets.strip
+File: lib/hello.py
+my_name = raw_input("What's your name? ")
 
-puts "Hello, #{my_name}!"
+print "Hello, %s!" % my_name
 EOF
 
 Execute:
-git add lib/hello.rb
+git add lib/hello.py
 git commit -m "Made interactive"
 
 h2. View the Branches
@@ -1804,29 +1834,33 @@ Output:
 $ git checkout greet
 Switched to branch 'greet'
 $ git merge master
-Auto-merging lib/hello.rb
-CONFLICT (content): Merge conflict in lib/hello.rb
+Auto-merging lib/hello.py
+CONFLICT (content): Merge conflict in lib/hello.py
 Automatic merge failed; fix conflicts and then commit the result.
 EOF
 
-If you open lib/hello.rb, you will see:
+If you open lib/hello.py, you will see:
 
-file: lib/hello.rb
+file: lib/hello.py
 <<<<<<< HEAD
-require 'greeter'
+import sys
+import greeter
 
 # Default is World
-name = ARGV.first || "World"
 
-greeter = Greeter.new(name)
-puts greeter.greet
+try:
+    name = sys.argv[1]
+except IndexError:
+    name = "World"
+
+greeter = Greeter(name)
+print greeter.greet()
 =======
 # Default is World
 
-puts "What's your name"
-my_name = gets.strip
+my_name = raw_input("What's your name? ")
 
-puts "Hello, #{my_name}!"
+print "Hello, %s!" % my_name
 >>>>>>> master
 EOF
 
@@ -1835,23 +1869,22 @@ p. The first section is the version on the head of the current branch
 
 h2. Fix the Conflict
 
-p. You need to manually resolve the conflict.  Modify @lib/hello.rb@
+p. You need to manually resolve the conflict.  Modify @lib/hello.py@
 to be the following.
 
-File: lib/hello.rb
-require 'greeter'
+File: lib/hello.py
+import greeter
 
-puts "What's your name"
-my_name = gets.strip
+my_name = raw_input("What's your name? ")
 
-greeter = Greeter.new(my_name)
-puts greeter.greet
+greeter = Greeter(my_name)
+print greeter.greet()
 EOF
 
 h2. Commit the Conflict Resolution
 
 Execute:
-git add lib/hello.rb
+git add lib/hello.py
 =add
 git commit -m "Merged master fixed conflict."
 =commit
@@ -2137,8 +2170,8 @@ git clone hello cloned_hello
 ls
 =ls2
 +cd cloned_hello
-+git config user.name "Jim Weirich"
-+git config user.email "jim (at) edgecase.com"
++git config user.name "Ryan Nowakowski"
++git config user.email "ryan@keyingredient.com"
 +cd ..
 
 Output:
