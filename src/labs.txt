@@ -1300,35 +1300,30 @@ h3. Goals
 
 * Add another file to our repository
 
-h2. Now add a Rakefile
+h2. Now add a Makefile
 
-p. Let's add a Rakefile to our repository.  The following one will do
+p. Let's add a Makefile to our repository.  The following one will do
 nicely.
 
-File: Rakefile
-#!/usr/bin/ruby -wKU
-
-task :default => :run
-
-task :run do
-  require './lib/hello'
-end
+File: Makefile
+all:
+	python lib/hello.py
 EOF
 
 p. Add and commit the change.
 
 Execute:
-git add Rakefile
-git commit -m "Added a Rakefile."
+git add Makefile
+git commit -m "Added a Makefile."
 
-p. You should be able to use Rake to run your hello program now.
+p. You should be able to use make to run your hello program now.
 
 Execute:
-rake
-=rake
+make
+=make
 
 Output:
-=rake
+=make
 EOF
 
 ----------------------------------------------------------------------
@@ -1467,7 +1462,7 @@ h2. Dumping the Latest Commit
 
 Using the SHA1 hash from the commit listed above ...
 
-Set: hash=hash_for("Added a Rakefile")
+Set: hash=hash_for("Added a Makefile")
 Execute:
 git cat-file -t <hash>
 =type
@@ -1506,7 +1501,7 @@ Output:
 =treedump
 EOF
 
-p. Yep, I see the Rakefile and the lib directory.
+p. Yep, I see the Makefile and the lib directory.
 
 h2. Dumping the lib directory
 
@@ -1604,23 +1599,18 @@ Execute:
 git add lib/hello.py
 git commit -m "Hello uses Greeter"
 
-h2. Changes for Greet: Update the Rakefile
+h2. Changes for Greet: Update the Makefile
 
-p. Update the Rakefile to use an external ruby process
+p. Update the Makefile to use a env var parameter
 
-File: Rakefile
-#!/usr/bin/ruby -wKU
-
-task :default => :run
-
-task :run do
-  ruby '-Ilib', 'lib/hello.py'
-end
+File: Makefile
+all:
+	python ./lib/hello.py $(NAME)
 EOF
 
 Execute:
-git add Rakefile
-git commit -m "Updated Rakefile"
+git add Makefile
+git commit -m "Updated Makefile"
 
 h2. Up Next
 
@@ -1729,7 +1719,7 @@ p. Here is our first chance to see the @--graph@ option on @git hist@ in
 action. Adding the @--graph@ option to @git log@ causes it to draw the
 commit tree using simple ASCII characters.  We can see both branches
 (greet and master), and that the master branch is the current HEAD.
-The common ancestor to both branches is the "Added a Rakefile" branch.
+The common ancestor to both branches is the "Added a Makefile" branch.
 
 p. The @--all@ flag makes sure that we see all the branches.  The
 default is to show only the current branch.
@@ -1947,10 +1937,10 @@ Output:
 EOF
 
 p. That's a bit hard to read, but looking at the data we see that the
-"Updated Rakefile" commit was the last commit on the greet branch
+"Updated Makefile" commit was the last commit on the greet branch
 before merging.  Let's reset the greet branch to that commit.
 
-Set: hash=hash_for("Updated Rakefile")
+Set: hash=hash_for("Updated Makefile")
 Execute:
 git reset --hard <hash>
 =reset
@@ -2040,7 +2030,7 @@ $ git rebase master
 First, rewinding head to replay your work on top of it...
 Applying: added Greeter class
 Applying: hello uses Greeter
-Applying: updated Rakefile
+Applying: updated Makefile
 $
 =log
 EOF
@@ -2206,7 +2196,7 @@ Output:
 EOF
 
 p. You should see a list of all the files in the top level of the
-original repository (@README@, @Rakefile@ and @lib@).
+original repository (@README@, @Makefile@ and @lib@).
 
 
 h2. Review the Repository History
@@ -2368,7 +2358,7 @@ p. Find the "Changed README in original repo" commit in the history
 above.  Notice that the commit includes "origin/master" and
 "origin/HEAD".
 
-p. Now look at the "Updated Rakefile" commit.  You will see that it
+p. Now look at the "Updated Makefile" commit.  You will see that it
 the local master branch points to this commit, not to the new commit
 that we just fetched.
 
