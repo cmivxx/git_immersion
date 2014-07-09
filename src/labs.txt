@@ -544,6 +544,9 @@ h2. Other Tools
 p. Both <code>gitx</code> (for Macs) and <code>gitk</code> (any
 platform) are useful in exploring log history.
 
+p. Note: When using gitx on the Mac, there are a bunch of forks but
+rowanj branch is the best.  So sayeth Robin.
+
 ----------------------------------------------------------------------
 h1. Aliases
 
