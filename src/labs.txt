@@ -1521,13 +1521,13 @@ p. There's the @hello.py@ file.
 
 h2. Dumping the @hello.py@ file
 
-Set: rbhash=hash_in(var['libhash'], 'hello')
+Set: pyhash=hash_in(var['libhash'], 'hello')
 Execute:
-git cat-file -p <rbhash>
-=rbdump
+git cat-file -p <pyhash>
+=pydump
 
 Output:
-=rbdump
+=pydump
 EOF
 
 p. There you have it.  We've dumped commit objects, tree objects and
@@ -1585,7 +1585,7 @@ p. Update the hello.py file to use greeter
 
 File: lib/hello.py
 import sys
-import greeter
+from greeter import Greeter
 
 # Default is World
 
@@ -1837,7 +1837,7 @@ If you open lib/hello.py, you will see:
 file: lib/hello.py
 <<<<<<< HEAD
 import sys
-import greeter
+from greeter import Greeter
 
 # Default is World
 
@@ -1866,7 +1866,7 @@ p. You need to manually resolve the conflict.  Modify @lib/hello.py@
 to be the following.
 
 File: lib/hello.py
-import greeter
+from greeter import Greeter
 
 my_name = raw_input("What's your name? ")
 
